@@ -6,6 +6,7 @@ services:
     startCommand: gunicorn clinica_core.wsgi:application
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: config.settings
+        value: clinica_core.settings
       - key: PYTHON_VERSION
         value: 3.11
+
