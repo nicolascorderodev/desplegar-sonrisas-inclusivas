@@ -1,0 +1,54 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonrisas Inclusivas - Contacto</title>
+    <link rel="stylesheet" href="{% static 'css/contactanos.css' %}">
+</head>
+<body class="body">
+    <header class="header-pagina">
+        <h1>Clínica odontológica || Sonrisas Inclusivas<br><span class="palabras-importantes">Contacto</span></h1>
+        <p></p>
+    </header>
+    <div class="contenedor-formulario">
+        <div class="formulario-contacto">
+            <h2>Contáctanos</h2>
+            <form method="POST" action="{% url 'contacto' %}">
+                {% csrf_token %}
+                <div class="grupo-formulario">
+                    <label for="id_nombre">Nombre:</label>
+                    {{ form.nombre }}
+                </div>
+                <div class="grupo-formulario">
+                    <label for="id_correo">Correo Electrónico:</label>
+                    {{ form.correo }}
+                </div>
+                <div class="grupo-formulario">
+                    <label for="id_telefono">Teléfono:</label>
+                    {{ form.telefono }}
+                </div>
+                <div class="grupo-formulario">
+                    <label for="id_mensaje">Mensaje:</label>
+                    {{ form.mensaje }}
+                </div>
+                <button type="submit" class="boton-contacto">Enviar</button>
+                {% if messages %}
+                    <div class="alert alert-success" role="alert">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </form>                       
+        </div>
+    </div>
+    <footer class="footer-pagina">
+        <p>© 2024 Clínica odontológica <span class="palabras-importantes">Sonrisas Inclusivas</span> | Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
+{% endblock %}

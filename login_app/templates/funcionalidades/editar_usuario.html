@@ -1,0 +1,100 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuario</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'crear_usuario.css' %}?v=2">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card p-4 shadow">
+            <h2 class="text-center mb-4">Editar Usuario</h2>
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Nombre Completo:</label>
+                    <input type="text" name="nombre_completo" class="form-control" value="{{ usuario.nombre_completo }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Usuario:</label>
+                    <input type="text" name="username" class="form-control" value="{{ usuario.username }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Correo Electrónico:</label>
+                    <input type="email" name="email" class="form-control" value="{{ usuario.email }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Número de Documento:</label>
+                    <input type="text" name="numero_documento" class="form-control" value="{{ usuario.numero_documento }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Nueva Contraseña (opcional):</label>
+                    <input type="password" name="password" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Rol:</label>
+                    <select name="role" class="form-select">
+                        <option value="admin" {% if usuario.role == 'admin' %}selected{% endif %}>Administrador</option>
+                        <option value="auxiliar" {% if usuario.role == 'auxiliar' %}selected{% endif %}>Auxiliar Administrativo</option>
+                        <option value="dentista" {% if usuario.role == 'dentista' %}selected{% endif %}>Dentista</option>
+                        <option value="paciente" {% if usuario.role == 'paciente' %}selected{% endif %}>Paciente</option>
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    {% if request.user.role == "admin" %}
+                        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Volver</a>
+                    {% elif request.user.role == "auxiliar" %}
+                        <a href="{% url 'auxiliar_dashboard' %}" class="btn btn-secondary">Volver</a>
+                    {% elif request.user.role == "dentista" %}
+                        <a href="{% url 'dentista_dashboard' %}" class="btn btn-secondary">Volver</a>
+                    {% elif request.user.role == "paciente" %}
+                        <a href="{% url 'paciente_dashboard' %}" class="btn btn-secondary">Volver</a>
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary">Actualizar Usuario</button>
+                </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Verificar si el usuario fue actualizado con éxito
+        {% if usuario_actualizado %}
+            Swal.fire({
+                title: "Usuario Actualizado",
+                text: "Los datos del usuario se han actualizado correctamente.",
+                icon: "success",
+                confirmButtonText: "OK"
+            });
+        {% endif %}
+
+        // Mostrar error si hay un mensaje
+        {% if error_message %}
+            Swal.fire({
+                title: "Error",
+                text: "{{ error_message }}",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+        {% endif %}
+    </script>
+
+</body>
+</html>

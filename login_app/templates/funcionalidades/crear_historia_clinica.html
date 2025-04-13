@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Crear Historia Clínica</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .alert {
+            transition: opacity 0.5s ease-out;
+        }
+        .historia-id {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #0d6efd;
+            background-color: #f8f9fa;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+        .btn-volver {
+            transition: all 0.3s ease;
+        }
+        .btn-volver:hover {
+            transform: translateX(-3px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Creación de Historia Clínica {{ paciente.get_full_name }}</h2>
+
+        <!-- Mensajes de éxito/error -->
+        {% if messages %}
+        <div class="alert alert-success alert-dismissible fade show">
+            {% for message in messages %}
+                <div>{{ message }}</div>
+            {% endfor %}
+            {% if historia_id %}
+            <div class="mt-3">
+                <strong>Número asignado:</strong> <span class="historia-id">HC-{{ historia_id }}</span>
+            </div>
+            {% endif %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+
+        <!-- Formulario de creación -->
+        <form method="POST" id="historiaForm" class="mt-4">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="fecha" class="form-label">Fecha de Inicio</label>
+                <input type="date" class="form-control" id="fecha" name="fecha" value="{{ form_data.fecha|default:'' }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="tratamiento" class="form-label">Tratamiento</label>
+                <textarea class="form-control" id="tratamiento" name="tratamiento" rows="4" required>{{ form_data.tratamiento|default:'' }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="duracion" class="form-label">Duración del Tratamiento</label>
+                <input type="text" class="form-control" id="duracion" name="duracion" value="{{ form_data.duracion|default:'' }}" required>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="fas fa-save me-2"></i> Guardar
+                </button>
+                <a href="{% url 'gestion_historia_clinica' %}" class="btn btn-secondary btn-volver">
+                    <i class="fas fa-arrow-left me-2"></i> Volver
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+
+        
+        document.addEventListener('DOMContentLoaded', function() {                                 
+            // Limpiar formulario si hay mensajes de éxito           
+                const successMessages = document.querySelectorAll('.alert-success');
+                if (successMessages.length > 0) {
+                    const form = document.getElementById('historiaForm');
+                    const elementos = form.elements;
+
+            for (let i = 0; i < elementos.length; i++) {
+                elementos[i].disabled = true;
+            }
+        }      
+
+            // Cerrar automáticamente los mensajes después de 5 segundos
+            setTimeout(() => {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

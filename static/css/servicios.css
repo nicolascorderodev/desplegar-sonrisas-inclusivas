@@ -1,0 +1,53 @@
+.body {
+    background-color: #f9f2f2;
+    font-family: Arial, sans-serif;
+    margin: 0 auto;
+    padding: 0 auto;
+}
+
+.header-pagina {
+    text-align: center;
+    padding: 4px;
+    background-color: #4baced;
+    color: #000000;
+    margin-bottom: 5px;
+}
+
+.footer-pagina {
+    text-align: center;
+    padding: 25px;
+    background: #4baced;
+    color: #000000;
+    margin-top: 10px;
+}
+
+.palabras-importantes {
+    font-weight: bold;
+}
+
+.contenedor-servicios {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 30px;
+}
+
+.servicio {
+    background-color: #d0d2d4;
+    border: 1px solid #4a4a4a74;
+    border-radius: 10px;
+    margin: 30px;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+.precio {
+    font-size: 25px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.login:hover {
+    font-weight: bolder;
+    background-color: gray;
+}

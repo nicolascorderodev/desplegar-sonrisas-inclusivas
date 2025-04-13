@@ -1,0 +1,41 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        {% load static %}
+        <title>Sonrisas Inclusivas - Inicio</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    </head>
+    <body>
+        <header class="header">
+            <h2>¡Tu sonrisa es nuestra prioridad!</h2>
+            <p>Brindamos atención dental de calidad para toda la familia.</p>
+            <a href="{% url 'contacto' %}">¡¡¡Agenda tu cita hoy!!!</a>
+        </header>
+        <div class="contenedor-info">
+            <section class="informacion-home">
+                <h2>Nuestra historia</h2>
+                <p>Desde 2024, la clínica odontológica <strong>Sonrisas Inclusivas</strong> ha sido un faro de salud dental y bienestar en nuestra comunidad. Con una pasión inquebrantable por la excelencia y la inclusión, nos hemos comprometido a proporcionar atención dental de la más alta calidad en un ambiente acogedor y accesible para todos.</p>
+                <img src="{% static 'img/historia.jpg' %}" alt="Historia de la clínica sonrisas inclusivas">
+            </section class="informacion-home">
+            <section class="informacion-home">
+                <h2>Atención personalizada</h2>
+                <p>En nuestra clínica, creemos firmemente en la importancia de la atención personalizada. Cada paciente es único, y nos dedicamos a asegurar que su experiencia sea lo más cómoda y satisfactoria posible. Desde el primer contacto hasta el final del tratamiento, nuestro equipo profesional está aquí para guiar y apoyar en cada paso del camino.</p>
+                <img src="{% static 'img/atencion.jpg' %}" alt="Atención personalizada de la clínica sonrisas inclusivas">
+            </section>
+            <section class="informacion-home">
+                <h2>Nuestro equipo</h2>
+                <p>Nuestro equipo de expertos dentales está compuesto por profesionales altamente calificados y dedicados que están comprometidos con la excelencia en cada aspecto de su trabajo. Nos enorgullece mantenernos al día con las últimas tecnologías y técnicas en odontología, asegurando así los mejores resultados para nuestros pacientes.</p>
+                <img src="{% static 'img/equipo.jpg' %}" alt="Equipo de trabajo de la clínica sonrisas inclusivas">
+            </section>
+        </div>
+        <footer class="footer">
+            <p>© 2024 Clínica Odontológica || Sonrisas Inclusivas S.A.S</p>
+        </footer>
+    </body>
+</html>
+{%endblock%}

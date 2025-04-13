@@ -1,0 +1,101 @@
+<!-- templates/funcionalidades/gestion_modulo_paciente.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión Módulo Paciente</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="{% static 'css/paciente.css' %}">
+    <style>
+        .btn-modulo {
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .btn-modulo:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .btn-modulo i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <!-- Encabezado común para todas las páginas -->
+        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+            <div>
+                <h2 class="h4 mb-1 text-primary">
+                    <i class="fas fa-user me-2"></i>Módulo del Paciente
+                </h2>
+                <p class="mb-0 text-muted">Bienvenido, {{ request.user.nombre_completo }}</p>
+            </div>
+            <button onclick="confirmarLogout()" class="btn btn-outline-danger btn-sm">
+                <i class="fas fa-sign-out-alt me-1"></i> Cerrar sesión
+            </button>
+        </div>
+
+        <!-- Contenido principal con los dos botones -->
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-5 mb-4">
+                <a href="{% url 'paciente_mi_historia' %}" class="btn btn-info btn-modulo w-100">
+                    <i class="fas fa-file-medical"></i>
+                    Mi Historia Clínica
+                </a>
+            </div>
+            <div class="col-md-5 mb-4">
+                <a href="{% url 'paciente_mis_citas' %}" class="btn btn-primary btn-modulo w-100">
+                    <i class="fas fa-calendar-alt"></i>
+                    Mis Citas
+                </a>
+            </div>
+        </div>
+
+        <!-- Espacio para contenido dinámico si es necesario -->
+        {% block contenido_paciente %}{% endblock %}
+    </div>
+
+    <!-- Scripts comunes -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <form id="logout-form" action="{% url 'logout' %}" method="POST" style="display: none;">
+        {% csrf_token %}
+    </form>
+    
+    <script>
+        function confirmarLogout() {
+            Swal.fire({
+                title: "¿Cerrar sesión?",
+                text: "¿Estás seguro de que deseas salir del sistema?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Sí, salir",
+                cancelButtonText: "Cancelar",
+                backdrop: true,
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById("logout-form").submit();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+

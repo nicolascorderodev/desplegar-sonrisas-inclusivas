@@ -1,0 +1,111 @@
+{% extends 'funcionalidades/gestion_modulo_paciente.html' %}
+
+{% block contenido_paciente %}
+<div class="card shadow mt-4">
+    <div class="card-header bg-primary text-white">
+        <h3><i class="fas fa-calendar-alt me-2"></i>Mis Citas Programadas</h3>
+    </div>
+    <div class="card-body">
+        {% if citas %}
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-center">Fecha</th>
+                        <th class="text-center">Hora</th>
+                        <th class="text-center">Estado</th>
+                        <th>Motivo</th>
+                        <th>Dentista</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cita in citas %}
+                    <tr>
+                        <td class="text-center align-middle">{{ cita.fecha|date:"d/m/Y" }}</td>
+                        <td class="text-center align-middle">{{ cita.hora|time:"H:i" }}</td>
+                        <td class="text-center align-middle">
+                            <span class="badge rounded-pill bg-{% if cita.estado == 'confirmada' %}success{% elif cita.estado == 'cancelada' %}danger{% else %}warning text-dark{% endif %}">
+                                {{ cita.estado|title }}
+                            </span>
+                        </td>
+                        <td class="align-middle">{{ cita.motivo|truncatewords:8 }}</td>
+                        <td class="align-middle">Dr. {{ cita.dentista.nombre_completo }}</td>
+                        <td class="text-center align-middle">
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#detalleCita{{ cita.id }}">
+                                <i class="fas fa-eye"></i> Detalles
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Modal para detalles de cita -->
+                    <div class="modal fade" id="detalleCita{{ cita.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary text-white">
+                                    <h5 class="modal-title">Detalles de Cita</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <p><strong>Fecha:</strong></p>
+                                            <p>{{ cita.fecha|date:"d/m/Y" }}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Hora:</strong></p>
+                                            <p>{{ cita.hora|time:"H:i" }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <p><strong>Estado:</strong></p>
+                                            <span class="badge bg-{% if cita.estado == 'confirmada' %}success{% elif cita.estado == 'cancelada' %}danger{% else %}warning text-dark{% endif %}">
+                                                {{ cita.estado|title }}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Dentista:</strong></p>
+                                            <p>Dr. {{ cita.dentista.nombre_completo }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <p><strong>Motivo:</strong></p>
+                                        <p>{{ cita.motivo }}</p>
+                                    </div>
+                                    {% if cita.observaciones %}
+                                    <div class="mb-3">
+                                        <p><strong>Observaciones:</strong></p>
+                                        <p>{{ cita.observaciones }}</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'paciente_dashboard' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Volver al inicio
+            </a>
+        </div>
+        {% else %}
+        <div class="text-center py-4">
+            <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+            <h4 class="text-muted">No tienes citas registradas</h4>
+            <p class="text-muted">Actualmente no hay citas programadas en tu historial.</p>
+            <a href="{% url 'paciente_dashboard' %}" class="btn btn-secondary mt-3">
+                <i class="fas fa-arrow-left me-1"></i> Volver al inicio
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

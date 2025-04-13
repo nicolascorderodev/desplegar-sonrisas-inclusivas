@@ -1,0 +1,52 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>Servicios - Sonrisas Inclusivas</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'css/servicios.css' %}">
+    </head>
+    <body class="body">
+        <header class="header-pagina">
+            <h1>Clínica odontológica || Sonrisas Inclusivas<br><span class="palabras-importantes">Nuestros servicios</span></h1>
+        </header>
+        <section class="contenedor-servicios">
+        <div class="servicio">
+            <h2>Consulta odontológica</h2>
+            <p>Visita al dentista para evaluar y cuidar de tu salud bucal. Durante esta visita, un odontólogo o higienista dental realizará una revisión completa de tu boca, dientes y encías.</p>
+            <p class="precio">$50,000</p>
+        </div>
+        <div class="servicio">
+            <h2>Blanqueamiento dental</h2>
+            <p>Tratamiento estético que busca aclarar el tono o color de tus dientes para que luzcan más blancos y brillantes. Con el tiempo, los dientes pueden oscurecerse debido a factores como el consumo de alimentos y bebidas colorantes (café, té, vino tinto), el tabaco, algunos medicamentos o simplemente por el paso del tiempo.</p>
+            <p class="precio">$200,000</p>
+        </div>
+        <div class="servicio">
+            <h2>Ortodoncia</h2>
+            <p>Ayuda a corregir la posición de los dientes y la mordida. Es decir, si tienes los dientes torcidos, apiñados o tienes problemas para morder correctamente, un ortodoncista puede ayudarte a solucionarlo.</p>
+            <p class="precio">$3,000,000</p>
+        </div>
+        <div class="servicio">
+            <h2>Implantes dentales</h2>
+            <p>Es una solución moderna y duradera para reemplazar dientes perdidos. Son pequeños tornillos de titanio que se colocan en el hueso maxilar (mandíbula superior) o mandibular (mandíbula inferior) para servir como raíz de un diente artificial.</p>
+            <p class="precio">$2,500,000 por diente</p>
+        </div>
+        <div class="servicio">
+            <h2>Limpieza dental</h2>
+            <p>Es un procedimiento esencial para mantener una buena salud bucal. Consiste en la eliminación profesional de la placa bacteriana y el sarro acumulados en los dientes y debajo de las encías.</p>
+            <p class="precio">$80,000</p>
+        </div>
+            <div class="servicio">
+                <h2>Endodoncia</h2>
+                <p>Es un tratamiento dental que se realiza cuando la pulpa de un diente está infectada o dañada. La pulpa es la parte interna del diente que contiene nervios y vasos sanguíneos.</p>
+                <p class="precio">$400,000</p>
+            </div>
+        </section>
+    <footer class="footer-pagina">
+        <p>© 2024 Clínica odontológica <span class="palabras-importantes">Sonrisas Inclusivas</span> | Todos los derechos reservados.</p>
+    </footer>
+</html>
+{% endblock %}

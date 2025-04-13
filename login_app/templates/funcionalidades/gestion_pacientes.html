@@ -1,0 +1,117 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Pacientes</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="{% static 'gestion_pacientes.css' %}?v=2">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Gestión de Pacientes</h2>
+
+        <!-- Barra de búsqueda -->
+        <div class="mb-3">
+            <input type="text" id="searchPatientInput" class="form-control" placeholder="Buscar paciente por nombre o número de documento..." onkeyup="filterPatientsTable()">
+        </div>
+
+        <!-- Botón para agregar paciente -->
+        <a href="{% url 'crear_usuario' %}" class="btn btn-primary mb-3">Agregar paciente</a>
+
+        <!-- Tabla de Pacientes -->
+        <div class="table-responsive">
+            <table id="pacientesTable" class="table table-striped table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Nombre Completo</th>
+                        <th>Usuario</th>
+                        <th>Número de Documento</th>
+                        <th>Email</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for paciente in pacientes %}
+                    <tr>
+                        <td>{{ paciente.nombre_completo }}</td>
+                        <td>{{ paciente.username }}</td>
+                        <td>{{ paciente.numero_documento }}</td>
+                        <td>{{ paciente.email }}</td>
+                        <td>
+                            <a href="{% url 'editar_usuario' paciente.id %}" class="btn btn-warning btn-sm">Editar</a>
+                            <button class="btn btn-danger btn-sm" onclick="confirmarEliminacion('{{ paciente.id }}', '{{ paciente.nombre_completo }}')">Eliminar</button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">No hay pacientes registrados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Botón para volver al dashboard -->
+        <div class="text-center mt-4">
+            <a href="{% url 'auxiliar_dashboard' %}" class="btn btn-secondary">Volver al dashboard</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function confirmarEliminacion(patientId, patientName) {
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: "Vas a eliminar a " + patientName + ". Esta acción no se puede deshacer.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "/eliminar-usuario/" + patientId + "/";
+                }
+            });
+        }
+
+        function filterPatientsTable() {
+            var input, filter, table, tr, tdNombre, tdDocumento, i, txtValueNombre, txtValueDocumento;
+            input = document.getElementById("searchPatientInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("pacientesTable");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 1; i < tr.length; i++) { // Ignorar encabezado
+                tdNombre = tr[i].getElementsByTagName("td")[0]; // Primera columna (Nombre completo)
+                tdDocumento = tr[i].getElementsByTagName("td")[2]; // Tercera columna (Número de documento)
+
+                if (tdNombre && tdDocumento) {
+                    txtValueNombre = tdNombre.textContent || tdNombre.innerText;
+                    txtValueDocumento = tdDocumento.textContent || tdDocumento.innerText;
+
+                    if (txtValueNombre.toUpperCase().includes(filter) || txtValueDocumento.toUpperCase().includes(filter)) {
+                        tr[i].style.display = ""; // Mostrar fila si hay coincidencia
+                    } else {
+                        tr[i].style.display = "none"; // Ocultar fila si no hay coincidencia
+                    }
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>

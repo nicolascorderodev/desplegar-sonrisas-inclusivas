@@ -1,0 +1,201 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Paciente - {{ usuario.nombre_completo }}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+    <style>
+        .card-header {
+            border-radius: 0.5rem 0.5rem 0 0 !important;
+        }
+        .list-group-item {
+            transition: all 0.3s ease;
+        }
+        .list-group-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .badge-estado {
+            font-size: 0.8rem;
+            padding: 0.35em 0.65em;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <!-- Encabezado -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h3 mb-1">
+                    <i class="fas fa-user-injured text-primary me-2"></i>Bienvenid@, <span class="text-primary">{{ usuario.nombre_completo }}</span>
+                </h1>
+                <p class="text-muted mb-0">
+                    <i class="fas fa-id-card me-1"></i> Documento: {{ usuario.numero_documento }}
+                </p>
+            </div>
+            <div class="badge bg-primary p-2">
+                <i class="fas fa-user-shield me-1"></i> Paciente
+            </div>
+        </div>
+
+        <!-- Tarjetas principales -->
+        <div class="row g-4">
+            <!-- Sección de citas -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h3 class="h5 mb-0">
+                            <i class="fas fa-calendar-alt me-2"></i>Mis Citas
+                        </h3>
+                        <a href="{% url 'paciente_mis_citas' %}" class="btn btn-sm btn-light">
+                            Ver todas <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        {% if citas %}
+                            <div class="list-group list-group-flush">
+                                {% for cita in citas %}
+                                    <div class="list-group-item py-3">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <h5 class="mb-1">
+                                                    <i class="far fa-calendar me-2"></i>{{ cita.fecha|date:"l, d F Y" }}
+                                                </h5>
+                                                <p class="mb-1">
+                                                    <i class="far fa-clock me-2"></i>{{ cita.hora|time:"H:i" }} - 
+                                                    <strong>Dr. {{ cita.dentista.nombre_completo }}</strong>
+                                                </p>
+                                                <p class="mb-0 text-muted small">
+                                                    <i class="far fa-comment me-2"></i>{{ cita.motivo|truncatewords:8 }}
+                                                </p>
+                                            </div>
+                                            <span class="badge badge-estado bg-{% if cita.estado == 'confirmada' %}success{% elif cita.estado == 'cancelada' %}danger{% else %}warning text-dark{% endif %}">
+                                                {{ cita.estado|title }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="text-center py-4">
+                                <i class="far fa-calendar-times fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">No tienes citas programadas</h5>
+                                <p class="text-muted small">Actualmente no hay citas registradas en tu agenda</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección de historia clínica -->
+            <div class="col-lg-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                        <h3 class="h5 mb-0">
+                            <i class="fas fa-file-medical me-2"></i>Mi Historia Clínica
+                        </h3>
+                        <a href="{% url 'paciente_mi_historia' %}" class="btn btn-sm btn-light">
+                            Ver completa <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        {% if historia_clinica %}
+                            <div class="mb-4">
+                                <h5 class="d-flex align-items-center">
+                                    <i class="fas fa-pills me-2"></i> Tratamiento Actual
+                                </h5>
+                                <p class="ps-4">{{ historia_clinica.tratamiento }}</p>
+                                <div class="d-flex justify-content-between ps-4">
+                                    <small class="text-muted">
+                                        <i class="far fa-calendar me-1"></i> Iniciado: {{ historia_clinica.fecha_inicio|date:"d/m/Y" }}
+                                    </small>
+                                    <small class="text-muted">
+                                        <i class="far fa-clock me-1"></i> Duración: {{ historia_clinica.duracion_tratamiento }}
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            {% if evoluciones %}
+                                <h5 class="d-flex align-items-center">
+                                    <i class="fas fa-chart-line me-2"></i> Últimas Evoluciones
+                                </h5>
+                                <div class="list-group list-group-flush">
+                                    {% for evolucion in evoluciones %}
+                                        <div class="list-group-item py-3">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="mb-1">
+                                                    <i class="far fa-calendar me-1"></i> {{ evolucion.fecha_consulta|date:"d/m/Y" }}
+                                                </h6>
+                                                {% if evolucion.medicamentos %}
+                                                    <span class="badge bg-success badge-estado">
+                                                        <i class="fas fa-prescription-bottle-alt me-1"></i> Medicación
+                                                    </span>
+                                                {% endif %}
+                                            </div>
+                                            <p class="mb-1 small">{{ evolucion.avance_tratamiento|truncatewords:15 }}</p>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="text-center py-4">
+                                <i class="fas fa-file-medical fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">Historia clínica no disponible</h5>
+                                <p class="text-muted small">No se encontró registro de historia clínica</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        
+        <!-- Pie de página -->
+        <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+            <small class="text-muted">
+                <i class="far fa-calendar-check me-1"></i> Sistema de Gestión Odontológica
+            </small>
+        <!-- Formulario oculto para cerrar sesión -->
+        <form id="logout-form" method="POST" action="{% url 'logout' %}" style="display: none;">
+        {% csrf_token %}
+        </form>
+
+        <!-- Botón visible para cerrar sesión -->
+        <button class="btn btn-outline-danger btn-sm" onclick="confirmarLogout()">
+            <i class="fas fa-sign-out-alt me-1"></i> Cerrar sesión
+        </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmarLogout() {
+            Swal.fire({
+                title: "¿Cerrar sesión?",
+                text: "¿Estás seguro de que deseas salir del sistema?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Sí, salir",
+                cancelButtonText: "Cancelar",
+                backdrop: true,
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById("logout-form").submit();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,51 @@
+{% extends 'funcionalidades/gestion_modulo_paciente.html' %}
+
+{% block contenido_paciente %}
+<div class="card shadow mt-4">
+    <div class="card-header bg-info text-white">
+        <h3><i class="fas fa-file-medical me-2"></i>Mi Historia Clínica Completa</h3>
+    </div>
+    <div class="card-body">
+        {% if historia_clinica %}
+            <div class="mb-4">
+                <h4>Información del tratamiento</h4>
+                <p><strong>Fecha de inicio:</strong> {{ historia_clinica.fecha_inicio }}</p>
+                <p><strong>Tratamiento:</strong> {{ historia_clinica.tratamiento }}</p>
+                <p><strong>Duración estimada:</strong> {{ historia_clinica.duracion_tratamiento }}</p>
+            </div>
+            
+            <h4>Evoluciones</h4>
+            {% if evoluciones %}
+                <div class="list-group">
+                    {% for evolucion in evoluciones %}
+                        <div class="list-group-item mb-3">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-2">Consulta del {{ evolucion.fecha_consulta }}</h5>
+                                <small>{{ evolucion.creado_en|date:"d/m/Y H:i" }}</small>
+                            </div>
+                            <p class="mb-1"><strong>Avance del tratamiento:</strong></p>
+                            <p>{{ evolucion.avance_tratamiento }}</p>
+                            
+                            {% if evolucion.medicamentos %}
+                                <p class="mb-1"><strong>Medicamentos:</strong></p>
+                                <p>{{ evolucion.medicamentos }}</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">No hay registros de evolución.</p>
+            {% endif %}
+        {% else %}
+            <p class="text-muted">Aún no tienes historia clínica registrada.</p>
+        {% endif %}
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'paciente_dashboard' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Volver al inicio
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
