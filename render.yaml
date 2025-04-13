@@ -3,7 +3,7 @@ services:
     name: clinica-odontologica
     env: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn config.wsgi:application"
+    startCommand: gunicorn clinica_core.wsgi:application
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: config.settings
